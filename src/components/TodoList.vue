@@ -1,6 +1,4 @@
 <template>
-<html>
-    <body>
         <div id="todoList">
             <div>
                 <span>
@@ -29,8 +27,6 @@
                 </li>
             </ul>
         </div>
-    </body>
-</html>
 </template>
 
 <style>

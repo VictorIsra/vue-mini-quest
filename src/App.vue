@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h2 class="text-info">MINI QUEST</h2>
-    <TodoList/>
+    <todoList/>
   </div>
 </template>
 
@@ -25,12 +25,3 @@
 }
 </style>
 
-<script>
-  import TodoList from './components/TodoList.vue'
-
-  export default {
-    components: {
-      TodoList
-    }
-  }
-</script>

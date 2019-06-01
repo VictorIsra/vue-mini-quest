@@ -1,21 +1,16 @@
 import '@babel/polyfill'
 import 'mutationobserver-shim'
+import App from './App.vue'
 import Vue from 'vue'
-import './plugins/bootstrap-vue'
 import router from './router'
 import store from './store'
-import BootstrapVue from 'bootstrap-vue'
-import App from './App.vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
+import TodoList from './components/TodoList.vue'
+/*a ordem de import importa! importe o css somente por após improtar o App:*/
+import './plugins/bootstrap-vue'
 
 Vue.config.productionTip = false
-
-Vue.use(BootstrapVue)
-
-
-require('./components/index');
+//importa globalmente o componente:
+Vue.component('todoList', TodoList);
 
 new Vue({
   router,
