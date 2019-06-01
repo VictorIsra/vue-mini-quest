@@ -1,5 +1,5 @@
 
-# todo-app
+# todo-app - como rodar
 
 ## Project setup
 ```
@@ -15,19 +15,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-=======
-# todoList
-
