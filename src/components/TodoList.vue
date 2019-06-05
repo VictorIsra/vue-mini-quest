@@ -46,6 +46,8 @@
 </style>
 
 <script>
+    
+
     export default {
         
         name: 'TodoList',
@@ -65,17 +67,17 @@
         },
         methods:{
             addTask: function(){   
-                this.list.newTask = this.list.newTask.toLowerCase();
-                const duplicates = this.list.tasks.filter(obj => obj.task === this.list.newTask);
+                // this.list.newTask = this.list.newTask.toLowerCase();
+                // const duplicates = this.list.tasks.filter(obj => obj.task === this.list.newTask);
                     
-                if(duplicates.length === 0  && this.list.newTask != ''){
-                    this.list.tasks.push({
-                        task: this.list.newTask,
-                        checked: false
-                    });
-                    this.list.showList = true;  
-                }  
-                this.list.newTask = '';
+                // if(duplicates.length === 0  && this.list.newTask != ''){
+                //     this.list.tasks.push({
+                //         task: this.list.newTask,
+                //         checked: false
+                //     });
+                //     this.list.showList = true;  
+                // }  
+                // this.list.newTask = '';
             },
             toggle: function(){
                 this.list.showList = !this.list.showList;

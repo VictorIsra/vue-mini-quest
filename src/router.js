@@ -5,5 +5,6 @@ import Home from './views/Home.vue'
 Vue.use(Router)
 
 export default new Router({
-  routes: []
+  routes: [],
+  mode: 'history' //botei essa linha pra n precisar botar "#" dps da porta
 })

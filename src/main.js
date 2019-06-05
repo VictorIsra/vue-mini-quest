@@ -5,6 +5,8 @@ import Vue from 'vue'
 import router from './router'
 import store from './store'
 import TodoList from './components/TodoList.vue'
+
+
 /*a ordem de import importa! importe o css somente por após improtar o App:*/
 import './plugins/bootstrap-vue'
 
