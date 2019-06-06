@@ -46,8 +46,7 @@
 </style>
 
 <script>
-    
-
+    import axios from 'axios';
     export default {
         
         name: 'TodoList',
@@ -67,7 +66,7 @@
         },
         methods:{
             addTask: function(){   
-                // this.list.newTask = this.list.newTask.toLowerCase();
+                 this.list.newTask = this.list.newTask.toLowerCase();
                 // const duplicates = this.list.tasks.filter(obj => obj.task === this.list.newTask);
                     
                 // if(duplicates.length === 0  && this.list.newTask != ''){
@@ -78,6 +77,35 @@
                 //     this.list.showList = true;  
                 // }  
                 // this.list.newTask = '';
+                //só posso passar essa url curta pq defini uma padrao em main.js!
+            //   axios.get('/insert').then(res => {//post('/insert',this.list.newTask).then(res => {
+            //     //   if(res.data.teste){
+            //     //     this.list.tasks.push({
+            //     //         task: res.data.teste.task,
+            //     //         checked: res.data.teste.checked
+            //     //     })
+            //     //   }else
+            //     //     console.log("requisicao nao retornou o que deveria...")  
+            //     console.log("respost pro cliente: ",res.data.teste.task)
+            //   })
+            //    .catch(error => console.log(error))
+              
+            // },
+             axios.post('/insert', {
+                 task: this.list.newTask,
+                 checked: false
+             }).then(res => {//post('/insert',this.list.newTask).then(res => {
+                //   if(res.data.teste){
+                //     this.list.tasks.push({
+                //         task: res.data.teste.task,
+                //         checked: res.data.teste.checked
+                //     })
+                //   }else
+                //     console.log("requisicao nao retornou o que deveria...")  
+                console.log("server me retornou ",res.data);
+              })
+               .catch(error => console.log(error))
+              
             },
             toggle: function(){
                 this.list.showList = !this.list.showList;
