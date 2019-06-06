@@ -1,17 +1,19 @@
 
-# todo-app - como rodar
+# todo-app
 
-## Project setup
+## Como rodar
+extraia o projeto e dentro do diretório raiz dele faça o seguinte:
+## 1 - Instale as dependências:
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 2 - inicie o serviço no client:
 ```
 npm run serve
 ```
+### 3 - inicie o serviço no back-end:
+```
+npm run run_express
+```
 
-### Compiles and minifies for production
-```
-npm run build
-```

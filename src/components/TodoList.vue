@@ -47,6 +47,9 @@
 
 <script>
     import axios from 'axios';
+    axios.defaults.baseURL = 'http://localhost:3000';
+    const msg = "td ok...";
+
     export default {
         
         name: 'TodoList',
@@ -81,12 +84,12 @@
                 const duplicates = this.list.tasks.filter(obj => obj.task === this.list.newTask);
                     
                 if(duplicates.length === 0  && this.list.newTask != ''){
-                   //só posso passar essa url curta pq defini uma padrao pro axios em main.js!
                     axios.post('/insert', {
                         task: this.list.newTask,
                         checked: false
                     })//se obteve resposta, é pq deu tudo certo, e renderizo a lista
                     .then(res => {
+                        console.log(msg)
                         this.getTasks();
                         this.list.newTask = '';  
                     })
@@ -98,25 +101,24 @@
             },
             removeTask: function(id){
                 axios.post('/remove',{_id: id})
-                    .then(res => {console.log("td ok")
+                    .then(res => {console.log(msg)
                         this.getTasks();
                     })
                     .catch(error => console.log(error));
             },
             clearTasks: function(){
                 axios.post('/drop',{})
-                    .then(res => {console.log("td ok")
+                    .then(res => {console.log(msg)
                         this.getTasks();
                     })
                     .catch(error => console.log(error));
             },
             updateStatus: function(id,status){
-                console.log(id, status);
                 axios.post('/update',{
                     _id: id,
                     checked: status
                 })
-                    .then(res => {console.log("td ok")
+                    .then(res => {console.log(msg)
                         this.getTasks();
                     })
                     .catch(error => console.log(error));

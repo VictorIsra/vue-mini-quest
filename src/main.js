@@ -7,8 +7,6 @@ import store from './store'
 import TodoList from './components/TodoList.vue'
 import axios from 'axios';
 
-
-axios.defaults.baseURL = 'http://localhost:3000';
 /*a ordem de import importa! importe o css somente por após improtar o App:*/
 import './plugins/bootstrap-vue'
 
