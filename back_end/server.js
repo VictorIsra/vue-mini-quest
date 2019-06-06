@@ -1,13 +1,22 @@
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser')//ESSENCIAL, NÃO ESQUECER!
 const cors = require('cors');//ESSENCIAL, NÃO ESQUECER!
 const bd = require('./bd');
 
 const app = express();
 const port = 3000;
-//const UserRouter = express.Router(); //tutorial botou mas n precisei
 
-//const error_msg = "Erro 404: Página não existe. Página requisitada: "
+//abrindo conexão com o banco:
+bd.mongoClient.connect(bd.connectionURL,{ useNewUrlParser: true }, (error, client) => {
+    if(error)
+        console.log("não rolou a conexão com o bd");
+    else{
+        console.log("conexão estabelecida com sucesso :) ");
+        const db = client.db(bd.databaseName);
+    }   
+})
+
+//const UserRouter = express.Router(); //tutorial botou mas n precisei
 app.use(bodyParser.json());//tutorial botou mas n me pareceu essencial mas blz
 app.use(bodyParser.urlencoded({ extended: true }));//passagem principal
 app.use(cors());
