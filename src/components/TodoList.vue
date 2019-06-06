@@ -14,11 +14,11 @@
                     :class="[task.checked ? list.class.done : list.class.toDo]"
                     class="list-group-item list-group-item-action"
                 > 
-                    <input v-model="task.checked" type="checkbox" class="el"> 
+                    <input v-model="task.checked" @change="updateStatus(task._id,task.checked)" type="checkbox" class="el"> 
                     <span v-if="task.checked" style="text-decoration: line-through">{{task.task}}</span> 
                     <span v-else>{{task.task}}</span>
                     <button 
-                        @click="removeTask(i)" 
+                        @click="removeTask(task._id)" 
                         :class="{'btn btn-info': !task.checked,
                                 'btn btn-success': task.checked }"
                         class="el"         
@@ -63,58 +63,63 @@
                     } 
                 }
             }    
+        },//será executado assim que a instancia e o doom forem renderizados:
+        mounted: function() {
+            this.getTasks();
         },
         methods:{
+            getTasks: function(){
+                axios.get('/fetch')
+                    .then((res) => {
+                        this.list.tasks = res.data;
+                        this.list.showList = true; 
+                    })
+                    .catch((error)=> console.log(error));
+            },
             addTask: function(){   
-                 this.list.newTask = this.list.newTask.toLowerCase();
-                // const duplicates = this.list.tasks.filter(obj => obj.task === this.list.newTask);
+                this.list.newTask = this.list.newTask.toLowerCase();
+                const duplicates = this.list.tasks.filter(obj => obj.task === this.list.newTask);
                     
-                // if(duplicates.length === 0  && this.list.newTask != ''){
-                //     this.list.tasks.push({
-                //         task: this.list.newTask,
-                //         checked: false
-                //     });
-                //     this.list.showList = true;  
-                // }  
-                // this.list.newTask = '';
-                //só posso passar essa url curta pq defini uma padrao em main.js!
-            //   axios.get('/insert').then(res => {//post('/insert',this.list.newTask).then(res => {
-            //     //   if(res.data.teste){
-            //     //     this.list.tasks.push({
-            //     //         task: res.data.teste.task,
-            //     //         checked: res.data.teste.checked
-            //     //     })
-            //     //   }else
-            //     //     console.log("requisicao nao retornou o que deveria...")  
-            //     console.log("respost pro cliente: ",res.data.teste.task)
-            //   })
-            //    .catch(error => console.log(error))
-              
-            // },
-             axios.post('/insert', {
-                 task: this.list.newTask,
-                 checked: false
-             }).then(res => {//post('/insert',this.list.newTask).then(res => {
-                //   if(res.data.teste){
-                //     this.list.tasks.push({
-                //         task: res.data.teste.task,
-                //         checked: res.data.teste.checked
-                //     })
-                //   }else
-                //     console.log("requisicao nao retornou o que deveria...")  
-                console.log("server me retornou ",res.data);
-              })
-               .catch(error => console.log(error))
-              
+                if(duplicates.length === 0  && this.list.newTask != ''){
+                   //só posso passar essa url curta pq defini uma padrao pro axios em main.js!
+                    axios.post('/insert', {
+                        task: this.list.newTask,
+                        checked: false
+                    })//se obteve resposta, é pq deu tudo certo, e renderizo a lista
+                    .then(res => {
+                        this.getTasks();
+                        this.list.newTask = '';  
+                    })
+                    .catch(error => console.log(error));
+                }              
             },
             toggle: function(){
                 this.list.showList = !this.list.showList;
             },
-            removeTask: function(i){
-                this.list.tasks.splice(i,1);
+            removeTask: function(id){
+                axios.post('/remove',{_id: id})
+                    .then(res => {console.log("td ok")
+                        this.getTasks();
+                    })
+                    .catch(error => console.log(error));
             },
             clearTasks: function(){
-                this.list.tasks = [];
+                axios.post('/drop',{})
+                    .then(res => {console.log("td ok")
+                        this.getTasks();
+                    })
+                    .catch(error => console.log(error));
+            },
+            updateStatus: function(id,status){
+                console.log(id, status);
+                axios.post('/update',{
+                    _id: id,
+                    checked: status
+                })
+                    .then(res => {console.log("td ok")
+                        this.getTasks();
+                    })
+                    .catch(error => console.log(error));
             }
         },
         computed:{

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser')//ESSENCIAL, NÃO ESQUECER!
 const cors = require('cors');//ESSENCIAL, NÃO ESQUECER!
 const bd = require('./bd');
-
+let db = {};
 const app = express();
 const port = 3000;
 
@@ -12,55 +12,87 @@ bd.mongoClient.connect(bd.connectionURL,{ useNewUrlParser: true }, (error, clien
         console.log("não rolou a conexão com o bd");
     else{
         console.log("conexão estabelecida com sucesso :) ");
-        const db = client.db(bd.databaseName);
+        //somente se eu conseguir me conectar, que irei escutar por requisições:
+        db = client.db(bd.databaseName);
+        
+        app.listen(port, () => console.log("server escutando na porta: " + port));
     }   
 })
-
 //const UserRouter = express.Router(); //tutorial botou mas n precisei
-app.use(bodyParser.json());//tutorial botou mas n me pareceu essencial mas blz
-app.use(bodyParser.urlencoded({ extended: true }));//passagem principal
+app.use(bodyParser.json());//mesmo o tutorial nao botando, isso foi essencial no meu codigo, nao esquecer.
+app.use(bodyParser.urlencoded({ extended: true }));//passagem principal, nao esquecer
 app.use(cors());
 
-// mongoClient.connect(connectionURL,{ useNewUrlParser: true }, (error, client) => {
-// });
- //use isso se nao vai implicar dizendo que é um cross-origin e que isso é proibido
-
-// app.post('/insert',(req,res) => {
-//     console.log("body q chego no server: ",req.body);
-//    // res.send(testexd );
-// });
-
-
-// app.get('/insert',(req,res) => {
-//     //console.log("body q chego no server GET: ",req.body);
-//     res.send(testexd );
-// });
-app.listen(port, () => console.log("server escutando na porta: " + port));
-
-app.post('/insert',(req,res) => {
-    //console.log("body q chego no server GET: ",req.body);
-    console.log("recebi do cliet ", req.body);
-    res.send("enviei pro clinte meu piru ")
+app.get('/fetch',(req,res) => {
+     db.collection(bd.collection).find({}).toArray(
+         (error,data) => {
+             if(!error)
+                 res.send(data);
+             else
+                console.log("erro ao tentar fetch td ", error);
+         }
+     );
 });
-// app.post('/remove',(req,res) => {//podia separar pra um remove_all mas farei em um só metodo    
-   
-//     res.send(testexd );
-// });
-// app.get('/show',(req,res) => {
-   
-//     res.send(testexd );
-// });
-// app.get('*',(req,res) => {
-//     res.send(error_msg + req.url);
-// });
-// app.post('*',(req,res) => {
-//     res.send(error_msg + req.url);
-// });
+app.post('/insert',(req,res) => {
+    if(req.body.task != ''){
+        console.log("recebi do cliet xd ", req.body.task);
+        db.collection(bd.collection).insertOne(req.body)
+        .then(data => {
+            console.log("item removido com sucesso ", data.ops);
+            res.send('');
+        })
+        .catch((error) => console.log(error));
+    }    
+    else
+        console.log("requisição recebida contém estrutura/valor inválidos");    
+});
+app.post('/remove',(req,res) => {
+    if(req.body._id != ''){
+        console.log("recebi do cliet xd ", req.body);
+        db.collection(bd.collection).deleteOne({_id: bd.objectID(req.body._id)})
+        .then(data => {
+            console.log("item removido com sucesso ", data.ops);
+            res.send('');
+        })
+        .catch((error) => console.log(error));
+    }    
+    else
+        console.log("requisição recebida contém estrutura/valor inválidos");    
+});
+app.post('/drop',(req,res) => {
+    //serio que precisa dessa putaria toda pra saber se o objeto é vazio?
+    if(Object.entries(req.body).length === 0 && req.body.constructor === Object){
+        console.log("recebi do cliet drop ", req.body);
+        db.collection(bd.collection).deleteMany({})
+        .then(data => {
+            console.log("documentos dropados ", data.ops);
+            res.send('');
+        })
+        .catch((error) => console.log(error));
+    }    
+    else
+        console.log("requisição recebida contém estrutura/valor inválidos");    
+});
+app.post('/update',(req,res) => {
+    if(req.body._id != ''){
+        //console.log("recebi do cliet xd ", req.body._id, req.body.checked);
+        db.collection(bd.collection).updateOne({
+            _id: bd.objectID(req.body._id)
+        },{
+            $set:{
+                checked: req.body.checked
+            }
+        })
+        .then(data => {
+            console.log("item atualizado ", data.ops);
+            res.send('');
+        })
+        .catch((error) => console.log(error));
+    }    
+    else
+        console.log("requisição recebida contém estrutura/valor inválidos");    
+});
 
-
-
-
-// module.exports = {
-//     port
-// }
+app.post('*',(req,res) => res.send("pag n existe")); 
+app.get('*',(req,res) => res.send("pag n existe")); 
 
