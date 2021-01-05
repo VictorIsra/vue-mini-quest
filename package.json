@@ -8,7 +8,7 @@
     "run_express": "nodemon ./back_end/server.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "bootstrap-vue": "^2.0.0-rc.19",
     "core-js": "^2.6.5",
